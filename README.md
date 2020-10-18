@@ -5,7 +5,7 @@ Terraform module to provide Kubernetes for the Hetzner Cloud.
 
 [![JWDobken](https://circleci.com/gh/JWDobken/terraform-hcloud-kubernetes.svg?style=shield)](https://app.circleci.com/pipelines/github/JWDobken/terraform-hcloud-kubernetes?branch=main)
 
-Create a Kubernetes cluster, with simple configurations, on the [Hetzner cloud](https://registry.terraform.io/providers/hetznercloud/hcloud/latest/docs) including the following features:
+Create a Kubernetes cluster on the [Hetzner cloud](https://registry.terraform.io/providers/hetznercloud/hcloud/latest/docs), with the following features:
 
 - implements Hetzner's [private network](https://community.hetzner.com/tutorials/hcloud-networks-basic) for network security;
 - configures [UFW](https://help.ubuntu.com/community/UFW) for managing complex iptables rules;
@@ -89,23 +89,22 @@ resource "hcloud_load_balancer_network" "cluster_network" {
 }
 ```
 
-...and pass the name to the `service.annotations`. For example, deploy the ingress-controller, such as [Bitnami's Nginx Ingress Controller](https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller), with some specific annotations:
+...and pass the name to the `service.annotations`. For example, deploy the ingress-controller, such as [Bitnami's Nginx Ingress Controller](https://github.com/bitnami/charts/tree/master/bitnami/nginx-ingress-controller), with the name of the load balancer as an annotation:
 
 ```cmd
 helm repo add bitnami https://charts.bitnami.com/bitnami
 helm upgrade --install nginx-ingress \
     --version 5.6.13 \
     --set service.annotations."load-balancer\.hetzner\.cloud/name"="demo-cluster-lb" \
-    --set service.annotations."load-balancer\.hetzner\.cloud/location"="nbg1" \
     bitnami/nginx-ingress-controller
 ```
 
 ## Considered features:
 
-- When a node is destroyed, I still need to run `kubectl drain <nodename>` and `kubectl delete node <nodename>`; on node list trigger removal of redundant nodes: `kubectl get nodes --output 'jsonpath={.items[*].metadata.name}'`
-- [high availability for the control plane](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/);
-- Node-pool architecture, with option to label and taint;
-- Initialize multiple master nodes;
+- When a node is destroyed, I still need to run `kubectl drain <nodename>` and `kubectl delete node <nodename>`. Compare actual list with `kubectl get nodes --output 'jsonpath={.items[*].metadata.name}'`.
+- [High availability for the control plane](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/).
+- Node-pool architecture, with option to label and taint.
+- Initialize multiple master nodes.
 
 ## Acknowledgements 
 
