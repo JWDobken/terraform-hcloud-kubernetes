@@ -3,6 +3,8 @@ Hetzner Cloud Kubernetes provider 🏖️
 
 Terraform module to provide Kubernetes for the Hetzner Cloud.
 
+[![JWDobken](https://circleci.com/gh/JWDobken/terraform-hcloud-kubernetes.svg?style=shield)](https://app.circleci.com/pipelines/github/JWDobken/terraform-hcloud-kubernetes?branch=main)
+
 Create a Kubernetes cluster, with simple configurations, on the [Hetzner cloud](https://registry.terraform.io/providers/hetznercloud/hcloud/latest/docs) including the following features:
 
 - implements Hetzner's [private network](https://community.hetzner.com/tutorials/hcloud-networks-basic) for network security;
