@@ -16,7 +16,7 @@ resource "null_resource" "firewall" {
   }
 
   connection {
-    host  =  element(var.connections, count.index)
+    host  = element(var.connections, count.index)
     user  = "root"
     agent = true
   }

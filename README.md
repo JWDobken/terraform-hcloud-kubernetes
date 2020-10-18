@@ -45,7 +45,7 @@ resource "hcloud_ssh_key" "demo_cluster" {
 }
 
 # Create a kubernetes cluster
-module "kubernetes_cluster" {
+module "hcloud_kubernetes_cluster" {
   source          = "git@github.com:JWDobken/terraform-hcloud-kubernetes.git?ref=v0.1.0"
   cluster_name    = "demo-cluster"
   hcloud_token    = var.hcloud_token
@@ -83,7 +83,7 @@ resource "hcloud_load_balancer" "load_balancer" {
 
 resource "hcloud_load_balancer_network" "cluster_network" {
   load_balancer_id = hcloud_load_balancer.load_balancer.id
-  network_id       = module.kubernetes_cluster.network_id
+  network_id       = module.hcloud_kubernetes_cluster.network_id
 }
 ```
 
