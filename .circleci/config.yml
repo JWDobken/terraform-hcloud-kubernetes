@@ -1,0 +1,20 @@
+version: 2
+
+jobs:
+  validate_terraform:
+    docker:
+      - image: hashicorp/terraform:0.13.4
+    steps:
+      - checkout
+      - run:
+          name: Validate Terraform Formatting
+          command: "[ -z \"$(terraform fmt -recursive -write=false)\" ] || { terraform fmt -recursive -write=false -diff; exit 1;}"
+      - run:
+          name: Validate Terraform configuration files
+          command: terraform init && terraform validate
+
+workflows:
+  version: 2
+  validate:
+    jobs:
+      - validate_terraform
