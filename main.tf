@@ -121,6 +121,10 @@ output "private_ips" {
   value = module.cluster.private_ips
 }
 
-output "kubernetes_cluster" {
-  value = module.cluster.all_nodes.*.ipv4_address
+output "master_nodes" {
+  value = module.cluster.master_nodes.*.ipv4_address
+}
+
+output "worker_nodes" {
+  value = module.cluster.worker_nodes.*.ipv4_address
 }
