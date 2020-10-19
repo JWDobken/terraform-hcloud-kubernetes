@@ -48,7 +48,7 @@ resource "hcloud_ssh_key" "demo_cluster" {
 
 # Create a kubernetes cluster
 module "hcloud_kubernetes_cluster" {
-  source          = "git@github.com:JWDobken/terraform-hcloud-kubernetes.git?ref=v0.1.0"
+  source          = "git@github.com:JWDobken/terraform-hcloud-kubernetes.git?ref=v0.1.1"
   cluster_name    = "demo-cluster"
   hcloud_token    = var.hcloud_token
   hcloud_ssh_keys = [hcloud_ssh_key.demo_cluster.id]
