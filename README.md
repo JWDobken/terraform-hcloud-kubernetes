@@ -4,6 +4,8 @@ Hetzner Cloud Kubernetes provider 🏖️
 Terraform module to provide Kubernetes for the Hetzner Cloud.
 
 [![JWDobken](https://circleci.com/gh/JWDobken/terraform-hcloud-kubernetes.svg?style=shield)](https://app.circleci.com/pipelines/github/JWDobken/terraform-hcloud-kubernetes?branch=main)
+[![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/JWDobken/terraform-hcloud-kubernetes?label=release)](https://github.com/JWDobken/terraform-hcloud-kubernetes/releases)
+[![license](https://img.shields.io/github/license/JWDobken/terraform-hcloud-kubernetes.svg)]()
 
 Create a Kubernetes cluster on the [Hetzner cloud](https://registry.terraform.io/providers/hetznercloud/hcloud/latest/docs), with the following features:
 
@@ -13,7 +15,7 @@ Create a Kubernetes cluster on the [Hetzner cloud](https://registry.terraform.io
 - deploys the [Controller Manager](https://github.com/hetznercloud/hcloud-cloud-controller-manager) with networks support, to integrate with the Hetzner Cloud API;
 - deploys the [Container Storage Interface](https://github.com/hetznercloud/csi-driver) for dynamic provisioning of volumes;
 
-# Quickstart
+# Getting Started
 
 These are the requirements to get started:
 
