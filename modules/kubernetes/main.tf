@@ -44,7 +44,7 @@ resource "null_resource" "install" {
 
   provisioner "remote-exec" {
     inline = [
-      "${element(data.template_file.install.*.rendered, count.index)}"
+      element(data.template_file.install.*.rendered, count.index)
     ]
   }
 
