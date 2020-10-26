@@ -32,7 +32,7 @@ resource "null_resource" "kubeadm_join" {
 
   provisioner "remote-exec" {
     inline = [
-      "${data.template_file.worker.rendered}"
+      data.template_file.worker.rendered
     ]
   }
 }
