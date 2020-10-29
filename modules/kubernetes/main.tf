@@ -70,7 +70,7 @@ resource "null_resource" "install" {
 
   provisioner "remote-exec" {
     inline = [
-      "${count.index < length(var.master_nodes) ? data.template_file.master.rendered : "echo skip"}"
+      count.index < length(var.master_nodes) ? data.template_file.master.rendered : "echo skip"
     ]
   }
 }
