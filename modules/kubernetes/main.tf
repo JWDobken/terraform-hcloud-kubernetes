@@ -37,6 +37,7 @@ resource "null_resource" "install" {
     destination = "/etc/systemd/system/kubelet.service.d/20-hetzner-cloud.conf"
   }
 
+
   provisioner "file" {
     source      = "${path.module}/files/sysctl.conf"
     destination = "/etc/sysctl.conf"
@@ -103,6 +104,15 @@ data "template_file" "access_tokens" {
   }
 }
 
+data "template_file" "internal_ip" {
+  count    = length(local.connections)
+  template = file("${path.module}/files/30-internal-ip.conf")
+
+  vars = {
+    private_ip = var.private_ips[*] //local.master_private_ip
+  }
+}
+
 module "kubeconfig" {
   source     = "matti/resource/shell"
   depends_on = [null_resource.kubeadm_join]
@@ -161,4 +171,3 @@ module "client_key_data" {
     ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
       root@${local.master_ip} 'kubectl config --kubeconfig /root/.kube/config view --flatten -o jsonpath='{.users[0].user.client-key-data}''
   EOT
-}
