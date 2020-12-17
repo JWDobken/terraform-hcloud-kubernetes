@@ -6,7 +6,7 @@ variable "hcloud_token" {
 }
 
 variable "hcloud_ssh_keys" {
-  type = list
+  type = list(string)
 }
 
 variable "cluster_name" {
@@ -22,6 +22,16 @@ variable "image" {
 }
 
 # NETWORK
+variable "network_id" {
+  type = string
+  description = "HC Network ID"
+}
+
+variable "subnet_id" {
+  type = string
+  description = "HC Subnet ID"
+}
+
 variable "network_zone" {
   type = string
 }

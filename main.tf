@@ -13,7 +13,7 @@ variable "hcloud_token" {
 
 variable "hcloud_ssh_keys" {
   description = "(Required) - SSH key IDs or names which should be injected into the server at creation time."
-  type        = list
+  type        = list(string)
 }
 
 variable "location" {
@@ -23,6 +23,16 @@ variable "location" {
 }
 
 # NETWORK
+variable "network_id" {
+  type = string
+  description = "HC Network ID"
+}
+
+variable "subnet_id" {
+  type = string
+  description = "HC Subnet ID"
+}
+
 variable "network_zone" {
   description = "(Optional) - Name of network zone, e.g. 'eu-central'."
   type        = string
@@ -86,8 +96,10 @@ module "cluster" {
   cluster_name     = var.cluster_name
   location         = var.location
   image            = var.image
+  network_id       = var.network_id
   network_zone     = var.network_zone
   network_ip_range = var.network_ip_range
+  subnet_id        = var.subnet_id
   subnet_ip_range  = var.subnet_ip_range
   master_type      = var.master_type
   master_count     = var.master_count

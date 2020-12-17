@@ -73,10 +73,12 @@ resource "hcloud_server" "worker_node" {
 
 resource "hcloud_network" "kubernetes_network" {
   name     = var.cluster_name
+  count    = length(var.network_id) > 0 ? 0 : 1
   ip_range = var.network_ip_range
 }
 
 resource "hcloud_network_subnet" "kubernetes_subnet" {
+  count        = length(var.subnet_id) > 0 ? 0 : 1
   network_id   = hcloud_network.kubernetes_network.id
   type         = "server"
   network_zone = var.network_zone
@@ -86,7 +88,7 @@ resource "hcloud_network_subnet" "kubernetes_subnet" {
 resource "hcloud_server_network" "private_network" {
   count     = local.server_count
   server_id = element(local.servers.*.id, count.index)
-  subnet_id = hcloud_network_subnet.kubernetes_subnet.id
+  subnet_id = length(var.subnet_id) > 0 ? var.subnet_id : hcloud_network_subnet.kubernetes_subnet.id
 }
 
 data "template_file" "floating_ip" {
