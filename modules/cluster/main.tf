@@ -88,7 +88,7 @@ resource "hcloud_network_subnet" "kubernetes_subnet" {
 resource "hcloud_server_network" "private_network" {
   count     = local.server_count
   server_id = element(local.servers.*.id, count.index)
-  subnet_id = var.create_network ? hcloud_network_subnet.kubernetes_subnet.*.id : var.subnet_id
+  subnet_id = var.create_network ? hcloud_network_subnet.kubernetes_subnet[0].id : var.subnet_id
 }
 
 data "template_file" "floating_ip" {
