@@ -25,9 +25,9 @@ output "worker_nodes" {
 }
 
 output "network_id" {
-  value = hcloud_network.kubernetes_network.id
+  value = var.create_network ? "" : hcloud_network.kubernetes_network.id
 }
 
 output "private_network" {
-  value = hcloud_server_network.private_network
+  value = var.create_network ? "" : hcloud_server_network.private_network
 }
