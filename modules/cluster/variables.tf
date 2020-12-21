@@ -22,6 +22,11 @@ variable "image" {
 }
 
 # NETWORK
+variable "create_network" {
+  type = bool
+  description = "Create HC network resources?"
+}
+
 variable "network_id" {
   type = string
   description = "HC Network ID"
