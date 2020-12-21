@@ -23,6 +23,11 @@ variable "location" {
 }
 
 # NETWORK
+variable "create_network" {
+  type = bool
+  description = "Create network?"
+}
+
 variable "network_id" {
   type = string
   description = "HC Network ID"
@@ -96,6 +101,7 @@ module "cluster" {
   cluster_name     = var.cluster_name
   location         = var.location
   image            = var.image
+  create_network   = var.create_network
   network_id       = var.network_id
   network_zone     = var.network_zone
   network_ip_range = var.network_ip_range
