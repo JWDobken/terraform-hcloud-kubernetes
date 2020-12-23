@@ -4,6 +4,7 @@ locals {
   connections       = concat(var.master_nodes, var.worker_nodes).*.ipv4_address
   master_ip         = element(var.master_nodes.*.ipv4_address, 0)
   master_private_ip = var.private_ips[0]
+  worker_private_ip = var.private_ips[1]
 }
 
 resource "null_resource" "install" {
@@ -35,6 +36,11 @@ resource "null_resource" "install" {
   provisioner "file" {
     source      = "${path.module}/files/20-hetzner-cloud.conf"
     destination = "/etc/systemd/system/kubelet.service.d/20-hetzner-cloud.conf"
+  }
+
+  provisioner "file" {
+    content     = data.template_file.internal_ip.*.rendered  //data.template_file.access_tokens.rendered
+    destination = "/etc/systemd/system/kubelet.service.d/30-internal-ip.conf"
   }
 
   provisioner "file" {
@@ -100,5 +106,14 @@ data "template_file" "access_tokens" {
   vars = {
     hcloud_token = var.hcloud_token
     network_id   = var.network_id
+  }
+}
+
+data "template_file" "internal_ip" {
+  count    = length(local.connections)
+  template = file("${path.module}/files/30-internal-ip.conf")
+
+  vars = {
+    private_ip = var.private_ips[*] //local.master_private_ip
   }
 }
