@@ -3,7 +3,7 @@ set -euo pipefail
 
 printf "[Service]
 Environment=\"KUBELET_EXTRA_ARGS=--node-ip=${private_ip}\"" \
-| tee/etc/systemd/system/kubelet.service.d/30-internal-ip.conf
+| tee /etc/systemd/system/kubelet.service.d/30-internal-ip.conf
 
 # initialize the cluster
 kubeadm config images pull
