@@ -38,10 +38,6 @@ resource "null_resource" "install" {
     destination = "/etc/systemd/system/kubelet.service.d/20-hetzner-cloud.conf"
   }
 
-  provisioner "file" {
-    content     = data.template_file.internal_ip.*.rendered  //data.template_file.access_tokens.rendered
-    destination = "/etc/systemd/system/kubelet.service.d/30-internal-ip.conf"
-  }
 
   provisioner "file" {
     source      = "${path.module}/files/sysctl.conf"
@@ -97,6 +93,7 @@ data "template_file" "master" {
     kubernetes_version = var.kubernetes_version
     master_ip          = local.master_ip
     cluster_name       = var.cluster_name
+    private_ip         = local.master_private_ip
   }
 }
 
@@ -109,11 +106,3 @@ data "template_file" "access_tokens" {
   }
 }
 
-data "template_file" "internal_ip" {
-  count    = length(local.connections)
-  template = file("${path.module}/files/30-internal-ip.conf")
-
-  vars = {
-    private_ip = var.private_ips[*] //local.master_private_ip
-  }
-}

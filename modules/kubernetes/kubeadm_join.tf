@@ -42,5 +42,6 @@ data "template_file" "worker" {
 
   vars = {
     master_private_ip = local.master_private_ip
+    private_ip         = local.master_private_ip
   }
 }
