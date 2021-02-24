@@ -67,18 +67,16 @@ output "kubeconfig" {
 
 Initialize the directory with `terraform init` and create the cluster with `terraform apply`.
 
-![cluster deploy](./deployed-servers.png)
-
 When the cluster is deployed, the `kubeconfig` to reach the cluster is available from the output. There are many ways to continue, but you can store it to file:
 
 ```cmd
-terraform output -raw kubeconfig > demo-cluster.config
+terraform output -raw kubeconfig > demo-cluster.conf
 ```
 
 and check the access by viewing the created cluster nodes:
 
 ```cmd
-$ kubectl get nodes --kubeconfig=demo-cluster.config
+$ kubectl get nodes --kubeconfig=demo-cluster.conf
 NAME       STATUS   ROLES    AGE   VERSION
 master-1   Ready    master   95s   v1.18.9
 worker-1   Ready    <none>   72s   v1.18.9
