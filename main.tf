@@ -13,7 +13,7 @@ variable "hcloud_token" {
 
 variable "hcloud_ssh_keys" {
   description = "(Required) - SSH key IDs or names which should be injected into the server at creation time."
-  type        = list
+  type        = list(any)
 }
 
 variable "location" {
@@ -127,4 +127,8 @@ output "master_nodes" {
 
 output "worker_nodes" {
   value = module.cluster.worker_nodes.*.ipv4_address
+}
+
+output "kubeconfig" {
+  value = module.kubernetes.kubeconfig
 }

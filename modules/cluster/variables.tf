@@ -6,7 +6,7 @@ variable "hcloud_token" {
 }
 
 variable "hcloud_ssh_keys" {
-  type = list
+  type = list(any)
 }
 
 variable "cluster_name" {

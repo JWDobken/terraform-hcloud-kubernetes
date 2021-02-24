@@ -11,17 +11,17 @@ variable "network_id" {
 }
 
 variable "private_ips" {
-  type = list
+  type = list(any)
 }
 
 # MASTER NODES
 variable "master_nodes" {
-  type = list
+  type = list(any)
 }
 
 # WORKER NODES
 variable "worker_nodes" {
-  type = list
+  type = list(any)
 }
 
 # KUBERNETES

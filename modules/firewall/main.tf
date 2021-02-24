@@ -1,7 +1,7 @@
 # firewall/main.tf
 
 variable "connections" {
-  type = list
+  type = list(any)
 }
 
 variable "subnet_ip_range" {
