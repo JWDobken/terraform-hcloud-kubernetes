@@ -102,3 +102,15 @@ data "template_file" "access_tokens" {
     network_id   = var.network_id
   }
 }
+
+module "kubeconfig" {
+  source     = "matti/resource/shell"
+  depends_on = [null_resource.kubeadm_join]
+
+  trigger = element(var.master_nodes.*.ipv4_address, 0)
+
+  command = <<EOT
+    ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+      root@${local.master_ip} 'cat /root/.kube/config'
+  EOT
+}

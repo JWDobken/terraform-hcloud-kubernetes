@@ -9,19 +9,19 @@ Terraform module to provide Kubernetes for the Hetzner Cloud.
 
 Create a Kubernetes cluster on the [Hetzner cloud](https://registry.terraform.io/providers/hetznercloud/hcloud/latest/docs), with the following features:
 
-- implements Hetzner's [private network](https://community.hetzner.com/tutorials/hcloud-networks-basic) for network security;
-- configures [UFW](https://help.ubuntu.com/community/UFW) for managing complex iptables rules;
-- deploys the [Flannel](https://github.com/coreos/flannel) CNI plugin;
-- deploys the [Controller Manager](https://github.com/hetznercloud/hcloud-cloud-controller-manager) with networks support, to integrate with the Hetzner Cloud API;
-- deploys the [Container Storage Interface](https://github.com/hetznercloud/csi-driver) for dynamic provisioning of volumes;
+- implements Hetzner's [private network](https://community.hetzner.com/tutorials/hcloud-networks-basic) for network security
+- configures [UFW](https://help.ubuntu.com/community/UFW) for managing complex iptables rules
+- deploys the [Flannel](https://github.com/coreos/flannel) CNI plugin
+- deploys the [Controller Manager](https://github.com/hetznercloud/hcloud-cloud-controller-manager) with networks support, to integrate with the Hetzner Cloud API
+- deploys the [Container Storage Interface](https://github.com/hetznercloud/csi-driver) for dynamic provisioning of volumes
 
 # Getting Started
 
 These are the requirements to get started:
 
-- have [Terraform version 0.13](https://learn.hashicorp.com/tutorials/terraform/install-cli) or higher installed locally;
-- create a [Hetzner Cloud](https://www.hetzner.com/cloud) account, project and project API token;
-- have a dedicated SSH-key; locally added to the [ssh-agent](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent). You can also have a look at the [`hcloud_ssh_key` provider](https://registry.terraform.io/providers/hetznercloud/hcloud/latest/docs/resources/ssh_key).
+- have [Terraform version 0.13](https://learn.hashicorp.com/tutorials/terraform/install-cli) or higher installed locally
+- create a [Hetzner Cloud](https://www.hetzner.com/cloud) account, project and project API token
+- have a dedicated SSH-key; locally added to the [ssh-agent](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent). You can also have a look at the [`hcloud_ssh_key` provider](https://registry.terraform.io/providers/hetznercloud/hcloud/latest/docs/resources/ssh_key)
 
 
 Set the `hcloud_token` variable value in a `*.tfvars` file or use the `-var="hcloud_token=..."` CLI option. The following setup will define the cluster:
@@ -59,14 +59,26 @@ module "hcloud_kubernetes_cluster" {
   worker_count    = 3
 }
 
+output "kubeconfig" {
+  value = module.hcloud_kubernetes_cluster.kubeconfig
+}
+
 ```
 
 Initialize the directory with `terraform init` and create the cluster with `terraform apply`.
 
-When the cluster is deployed, the config is copied locally and can be added to the [list of paths to configuration files](https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/#create-a-second-configuration-file) with: `export KUBECONFIG=$HOME/.kube/demo-cluster.conf:$KUBECONFIG`. Use the new config (`kubectl config use-context demo-cluster`) and check access:
+![cluster deploy](./deployed-servers.png)
+
+When the cluster is deployed, the `kubeconfig` to reach the cluster is available from the output. There are many ways to continue, but you can store it to file:
 
 ```cmd
-$ kubectl get nodes
+terraform output -raw kubeconfig > demo-cluster.config
+```
+
+and check the access by viewing the created cluster nodes:
+
+```cmd
+$ kubectl get nodes --kubeconfig=demo-cluster.config
 NAME       STATUS   ROLES    AGE   VERSION
 master-1   Ready    master   95s   v1.18.9
 worker-1   Ready    <none>   72s   v1.18.9
