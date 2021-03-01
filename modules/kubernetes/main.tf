@@ -114,3 +114,51 @@ module "kubeconfig" {
       root@${local.master_ip} 'cat /root/.kube/config'
   EOT
 }
+
+module "endpoint" {
+  source     = "matti/resource/shell"
+  depends_on = [null_resource.kubeadm_join]
+
+  trigger = element(var.master_nodes.*.ipv4_address, 0)
+
+  command = <<EOT
+    ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+      root@${local.master_ip} 'kubectl config --kubeconfig /root/.kube/config view -o jsonpath='{.clusters[0].cluster.server}''
+  EOT
+}
+
+module "certificate_authority_data" {
+  source     = "matti/resource/shell"
+  depends_on = [null_resource.kubeadm_join]
+
+  trigger = element(var.master_nodes.*.ipv4_address, 0)
+
+  command = <<EOT
+    ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+      root@${local.master_ip} 'kubectl config --kubeconfig /root/.kube/config view --flatten -o jsonpath='{.clusters[0].cluster.certificate-authority-data}''
+  EOT
+}
+
+module "client_certificate_data" {
+  source     = "matti/resource/shell"
+  depends_on = [null_resource.kubeadm_join]
+
+  trigger = element(var.master_nodes.*.ipv4_address, 0)
+
+  command = <<EOT
+    ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+      root@${local.master_ip} 'kubectl config --kubeconfig /root/.kube/config view --flatten -o jsonpath='{.users[0].user.client-certificate-data}''
+  EOT
+}
+
+module "client_key_data" {
+  source     = "matti/resource/shell"
+  depends_on = [null_resource.kubeadm_join]
+
+  trigger = element(var.master_nodes.*.ipv4_address, 0)
+
+  command = <<EOT
+    ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+      root@${local.master_ip} 'kubectl config --kubeconfig /root/.kube/config view --flatten -o jsonpath='{.users[0].user.client-key-data}''
+  EOT
+}
