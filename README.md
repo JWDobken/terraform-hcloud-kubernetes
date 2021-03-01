@@ -50,7 +50,7 @@ resource "hcloud_ssh_key" "demo_cluster" {
 
 # Create a kubernetes cluster
 module "hcloud_kubernetes_cluster" {
-  source          = "git::github.com/JWDobken/terraform-hcloud-kubernetes.git?ref=v0.1.6"
+  source          = "git::github.com/JWDobken/terraform-hcloud-kubernetes.git?ref=v0.1.7"
   cluster_name    = "demo-cluster"
   hcloud_token    = var.hcloud_token
   hcloud_ssh_keys = [hcloud_ssh_key.demo_cluster.id]
@@ -109,6 +109,30 @@ helm upgrade --install nginx-ingress \
     --version 5.6.13 \
     --set service.annotations."load-balancer\.hetzner\.cloud/name"="demo-cluster-lb" \
     bitnami/nginx-ingress-controller
+```
+
+## Chaining other terraform modules
+
+TLS certificate credentials form the output can be used to chain other Terraform modules, such as the [Helm provider](https://registry.terraform.io/providers/hashicorp/helm/latest/docs) or the [Kubernetes provider](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs):
+
+```hcl
+provider "helm" {
+  kubernetes {
+    host     = module.hcloud_kubernetes_cluster.endpoint
+
+    cluster_ca_certificate = base64decode(module.hcloud_kubernetes_cluster.certificate_authority_data)
+    client_certificate     = base64decode(module.hcloud_kubernetes_cluster.client_certificate_data)
+    client_key             = base64decode(module.hcloud_kubernetes_cluster.client_key_data)
+  }
+}
+
+provider "kubernetes" {
+  host = module.hcloud_kubernetes_cluster.endpoint
+
+  client_certificate     = base64decode(module.hcloud_kubernetes_cluster.client_certificate_data)
+  client_key             = base64decode(module.hcloud_kubernetes_cluster.client_key_data)
+  cluster_ca_certificate = base64decode(module.hcloud_kubernetes_cluster.client_certificate_data)
+}
 ```
 
 ## Considered features:

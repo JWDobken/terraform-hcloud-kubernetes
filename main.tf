@@ -132,3 +132,19 @@ output "worker_nodes" {
 output "kubeconfig" {
   value = module.kubernetes.kubeconfig
 }
+
+output "endpoint" {
+  value = module.kubernetes.endpoint
+}
+
+output "certificate_authority_data" {
+  value = module.kubernetes.certificate_authority_data
+}
+
+output "client_certificate_data" {
+  value = module.kubernetes.client_certificate_data
+}
+
+output "client_key_data" {
+  value = module.kubernetes.client_key_data
+}
