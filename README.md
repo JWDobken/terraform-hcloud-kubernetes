@@ -1,11 +1,11 @@
 Hetzner Cloud Kubernetes provider 🏖️
 ==================
 
-Terraform module to provide Kubernetes for the Hetzner Cloud.
+Unofficial Terraform module to provide Kubernetes for the Hetzner Cloud.
 
 [![JWDobken](https://circleci.com/gh/JWDobken/terraform-hcloud-kubernetes.svg?style=shield)](https://app.circleci.com/pipelines/github/JWDobken/terraform-hcloud-kubernetes?branch=main)
 [![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/JWDobken/terraform-hcloud-kubernetes?label=release)](https://github.com/JWDobken/terraform-hcloud-kubernetes/releases)
-[![license](https://img.shields.io/github/license/JWDobken/terraform-hcloud-kubernetes.svg)]()
+![license](https://img.shields.io/github/license/JWDobken/terraform-hcloud-kubernetes.svg)
 
 Create a Kubernetes cluster on the [Hetzner cloud](https://registry.terraform.io/providers/hetznercloud/hcloud/latest/docs), with the following features:
 
@@ -17,40 +17,20 @@ Create a Kubernetes cluster on the [Hetzner cloud](https://registry.terraform.io
 
 # Getting Started
 
-These are the requirements to get started:
-
-- have [Terraform version 0.13](https://learn.hashicorp.com/tutorials/terraform/install-cli) or higher installed locally
-- create a [Hetzner Cloud](https://www.hetzner.com/cloud) account, project and project API token
-- have a dedicated SSH-key; locally added to the [ssh-agent](https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent). You can also have a look at the [`hcloud_ssh_key` provider](https://registry.terraform.io/providers/hetznercloud/hcloud/latest/docs/resources/ssh_key)
-
-
-Set the `hcloud_token` variable value in a `*.tfvars` file or use the `-var="hcloud_token=..."` CLI option. The following setup will define the cluster:
+Configure the Hetzner Cloud provider according to the [documentation](https://registry.terraform.io/providers/hetznercloud/hcloud/latest/docs) and provide a [Hetzner Cloud SSH key resource](https://registry.terraform.io/providers/hetznercloud/hcloud/latest/docs/resources/ssh_key) to access the cluster machines:
 
 ```hcl
-# Set the required versions and sources
-terraform {
-  required_version = ">= 0.13"
-  required_providers {
-    hcloud = {
-      source = "hetznercloud/hcloud"
-    }
-  }
-}
-
-# Configure the Hetzner Cloud Provider
-provider "hcloud" {
-  token = var.hcloud_token
-}
-
-# Create a new SSH key
 resource "hcloud_ssh_key" "demo_cluster" {
   name       = "demo-cluster"
   public_key = file("~/.ssh/hcloud.pub")
 }
+```
 
-# Create a kubernetes cluster
+Create a Kubernetes cluster:
+
+```
 module "hcloud_kubernetes_cluster" {
-  source          = "git::github.com/JWDobken/terraform-hcloud-kubernetes.git?ref=v0.1.7"
+  source          = "JWDobken/kubernetes/hcloud"
   cluster_name    = "demo-cluster"
   hcloud_token    = var.hcloud_token
   hcloud_ssh_keys = [hcloud_ssh_key.demo_cluster.id]
@@ -64,8 +44,6 @@ output "kubeconfig" {
 }
 
 ```
-
-Initialize the directory with `terraform init` and create the cluster with `terraform apply`.
 
 When the cluster is deployed, the `kubeconfig` to reach the cluster is available from the output. There are many ways to continue, but you can store it to file:
 
