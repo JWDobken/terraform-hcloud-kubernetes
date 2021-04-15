@@ -23,6 +23,23 @@ variable "location" {
 }
 
 # NETWORK
+variable "create_network" {
+  description = "(Required) - Create network? When true new vpc created"
+  type = bool
+}
+
+variable "network_id" {
+  description = "(Optional) - HC Network ID to create cluster in. Required when create_network variable is set to true"
+  type = string
+  default = ""
+}
+
+variable "subnet_id" {
+  description = "(Optional) - HC Subnet ID to create cluster in. Required Required when create_network variable is set to true"
+  type = string
+  
+}
+
 variable "network_zone" {
   description = "(Optional) - Name of network zone, e.g. 'eu-central'."
   type        = string
@@ -86,8 +103,11 @@ module "cluster" {
   cluster_name     = var.cluster_name
   location         = var.location
   image            = var.image
+  create_network   = var.create_network
+  network_id       = var.network_id
   network_zone     = var.network_zone
   network_ip_range = var.network_ip_range
+  subnet_id        = var.subnet_id
   subnet_ip_range  = var.subnet_ip_range
   master_type      = var.master_type
   master_count     = var.master_count

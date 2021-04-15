@@ -22,6 +22,18 @@ variable "image" {
 }
 
 # NETWORK
+variable "create_network" {
+  type = bool
+}
+
+variable "network_id" {
+  type = string
+}
+
+variable "subnet_id" {
+  type = string
+}
+
 variable "network_zone" {
   type = string
 }
