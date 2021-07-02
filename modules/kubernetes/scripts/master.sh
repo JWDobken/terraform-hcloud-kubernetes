@@ -25,8 +25,8 @@ done
 kubectl -n kube-system patch deployment coredns --type json -p '[{"op":"add","path":"/spec/template/spec/tolerations/-","value":{"key":"node.cloudprovider.kubernetes.io/uninitialized","value":"true","effect":"NoSchedule"}}]'
 
 # create the secrets with Hetzner Cloud API tokens
-kubectl apply -f /tmp/access_tokens.conf
-[ -e /tmp/access_tokens.conf ] && rm /tmp/access_tokens.conf
+kubectl apply -f /tmp/access_tokens.yaml
+[ -e /tmp/access_tokens.yaml ] && rm /tmp/access_tokens.yaml
 
 # deploy the flannel CNI plugin
 kubectl apply -f /tmp/kube-flannel.yaml

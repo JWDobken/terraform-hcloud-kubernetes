@@ -50,7 +50,7 @@ resource "null_resource" "install" {
 
   provisioner "file" {
     content     = data.template_file.access_tokens.rendered
-    destination = "/tmp/access_tokens.conf"
+    destination = "/tmp/access_tokens.yaml"
   }
 
   provisioner "file" {
