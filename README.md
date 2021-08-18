@@ -28,7 +28,7 @@ resource "hcloud_ssh_key" "demo_cluster" {
 
 Create a Kubernetes cluster:
 
-```
+```hcl
 module "hcloud_kubernetes_cluster" {
   source          = "JWDobken/kubernetes/hcloud"
   cluster_name    = "demo-cluster"
