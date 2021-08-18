@@ -43,6 +43,10 @@ variable "master_count" {
   type = number
 }
 
+variable "mastername_format" {
+  type = string
+}
+
 # WORKER NODES
 variable "worker_type" {
   type = string
@@ -50,6 +54,10 @@ variable "worker_type" {
 
 variable "worker_count" {
   type = number
+}
+
+variable "workername_format" {
+  type = string
 }
 
 # LOAD BALANCER
