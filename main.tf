@@ -1,17 +1,19 @@
 module "cluster" {
-  source           = "./modules/cluster"
-  hcloud_token     = var.hcloud_token
-  hcloud_ssh_keys  = var.hcloud_ssh_keys
-  cluster_name     = var.cluster_name
-  location         = var.location
-  image            = var.image
-  network_zone     = var.network_zone
-  network_ip_range = var.network_ip_range
-  subnet_ip_range  = var.subnet_ip_range
-  master_type      = var.master_type
-  master_count     = var.master_count
-  worker_type      = var.worker_type
-  worker_count     = var.worker_count
+  source            = "./modules/cluster"
+  hcloud_token      = var.hcloud_token
+  hcloud_ssh_keys   = var.hcloud_ssh_keys
+  cluster_name      = var.cluster_name
+  location          = var.location
+  image             = var.image
+  network_zone      = var.network_zone
+  network_ip_range  = var.network_ip_range
+  subnet_ip_range   = var.subnet_ip_range
+  master_type       = var.master_type
+  master_count      = var.master_count
+  mastername_format = var.mastername_format
+  worker_type       = var.worker_type
+  worker_count      = var.worker_count
+  workername_format = var.workername_format
 }
 
 module "firewall" {

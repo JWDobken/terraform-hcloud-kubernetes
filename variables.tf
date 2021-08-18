@@ -58,6 +58,12 @@ variable "image" {
   default     = "ubuntu-20.04"
 }
 
+variable "mastername_format" {
+  description = "(Optional) - Format for the master node names, defaults to 'master-0'."
+  type        = string
+  default     = "master-%d"
+}
+
 # WORKER NODES
 variable "worker_type" {
   description = "(Optional) - For more types have a look at https://www.hetzner.de/cloud"
@@ -68,6 +74,12 @@ variable "worker_type" {
 variable "worker_count" {
   description = "(Required) - Number of worker nodes."
   type        = number
+}
+
+variable "workername_format" {
+  description = "(Optional) - Format for the worker node names, defaults to 'worker-0'."
+  type        = string
+  default     = "worker-%d"
 }
 
 # KUBERNETES

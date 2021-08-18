@@ -7,7 +7,7 @@ locals {
 
 resource "hcloud_server" "master_node" {
   count       = var.master_count
-  name        = "master-${count.index + 1}"
+  name        = format(var.mastername_format, count.index + 1)
   location    = var.location
   image       = var.image
   server_type = var.master_type
@@ -40,7 +40,7 @@ resource "hcloud_server" "master_node" {
 
 resource "hcloud_server" "worker_node" {
   count       = var.worker_count
-  name        = "worker-${count.index + 1}"
+  name        = format(var.workername_format, count.index + 1)
   location    = var.location
   image       = var.image
   server_type = var.worker_type
