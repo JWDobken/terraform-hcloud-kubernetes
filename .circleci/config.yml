@@ -3,7 +3,7 @@ version: 2
 jobs:
   validate_terraform:
     docker:
-      - image: hashicorp/terraform:0.13.4
+      - image: hashicorp/terraform:0.14.7
     steps:
       - checkout
       - run:
