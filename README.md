@@ -17,7 +17,7 @@ Create a Kubernetes cluster on the [Hetzner cloud](https://registry.terraform.io
 
 # Getting Started
 
-Configure the Hetzner Cloud provider according to the [documentation](https://registry.terraform.io/providers/hetznercloud/hcloud/latest/docs) and provide a [Hetzner Cloud SSH key resource](https://registry.terraform.io/providers/hetznercloud/hcloud/latest/docs/resources/ssh_key) to access the cluster machines:
+The Hetzner Cloud provider needs to be configured with *a token generated from the dashboard*, following to the [documentation](https://registry.terraform.io/providers/hetznercloud/hcloud/latest/docs). Provide a [Hetzner Cloud SSH key resource](https://registry.terraform.io/providers/hetznercloud/hcloud/latest/docs/resources/ssh_key) to access the cluster machines:
 
 ```hcl
 resource "hcloud_ssh_key" "demo_cluster" {
