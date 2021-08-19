@@ -55,11 +55,11 @@ and check the access by viewing the created cluster nodes:
 
 ```cmd
 $ kubectl get nodes --kubeconfig=demo-cluster.conf
-NAME       STATUS   ROLES    AGE   VERSION
-master-1   Ready    master   95s   v1.18.9
-worker-1   Ready    <none>   72s   v1.18.9
-worker-2   Ready    <none>   73s   v1.18.9
-worker-3   Ready    <none>   73s   v1.18.9
+NAME       STATUS   ROLES                AGE   VERSION
+master-1   Ready    control-plane,master 95s   v1.21.3
+worker-1   Ready    <none>               72s   v1.21.3
+worker-2   Ready    <none>               73s   v1.21.3
+worker-3   Ready    <none>               73s   v1.21.3
 ```
 
 ## Load Balancer

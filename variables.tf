@@ -84,7 +84,7 @@ variable "workername_format" {
 
 # KUBERNETES
 variable "kubernetes_version" {
-  description = "(Optional) - Kubernetes version installed, e.g. '1.18.9'."
+  description = "(Optional) - Kubernetes version installed, e.g. '1.21.3'."
   type        = string
-  default     = "1.18.9"
+  default     = "1.21.3"
 }
