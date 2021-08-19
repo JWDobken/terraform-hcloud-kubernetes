@@ -53,7 +53,7 @@ resource "hcloud_ssh_key" "demo_keys" {
 # Create a kubernetes cluster
 module "hcloud_kubernetes_cluster" {
   source          = "JWDobken/kubernetes/hcloud"
-  version         = "v0.1.8"
+  version         = "v0.1.9"
   cluster_name    = var.cluster_name
   hcloud_token    = var.hcloud_token
   hcloud_ssh_keys = [hcloud_ssh_key.demo_keys.id]
