@@ -1,8 +1,13 @@
 # cluster/main.tf
 
 locals {
-  server_count = var.master_count + var.worker_count
+  server_count = var.worker_count + var.master_count
   servers      = concat(hcloud_server.master_node, hcloud_server.worker_node)
+}
+
+resource "hcloud_ssh_key" "demo_cluster" {
+  name       = "demo-cluster"
+  public_key = file("${var.hcloud_ssh_private_key}.pub")
 }
 
 resource "hcloud_server" "master_node" {
@@ -11,17 +16,19 @@ resource "hcloud_server" "master_node" {
   location    = var.location
   image       = var.image
   server_type = var.master_type
-  ssh_keys    = var.hcloud_ssh_keys
+  ssh_keys    = [hcloud_ssh_key.demo_cluster.id]
 
   labels = {
     master = true
   }
 
   connection {
-    user    = "root"
-    type    = "ssh"
-    timeout = "2m"
-    host    = self.ipv4_address
+    user        = "root"
+    type        = "ssh"
+    timeout     = "2m"
+    agent       = false
+    private_key = file("${var.hcloud_ssh_private_key}")
+    host        = self.ipv4_address
   }
 
   provisioner "file" {
@@ -44,17 +51,19 @@ resource "hcloud_server" "worker_node" {
   location    = var.location
   image       = var.image
   server_type = var.worker_type
-  ssh_keys    = var.hcloud_ssh_keys
+  ssh_keys    = [hcloud_ssh_key.demo_cluster.id]
 
   labels = {
     master = false
   }
 
   connection {
-    user    = "root"
-    type    = "ssh"
-    timeout = "2m"
-    host    = self.ipv4_address
+    user        = "root"
+    type        = "ssh"
+    timeout     = "2m"
+    agent       = false
+    private_key = file("${var.hcloud_ssh_private_key}")
+    host        = self.ipv4_address
   }
 
   provisioner "file" {

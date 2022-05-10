@@ -8,6 +8,10 @@ variable "subnet_ip_range" {
   type = string
 }
 
+variable "hcloud_ssh_private_key" {
+  type = string
+}
+
 resource "null_resource" "firewall" {
   count = length(var.connections)
 
@@ -15,10 +19,13 @@ resource "null_resource" "firewall" {
     template = data.template_file.ufw.rendered
   }
 
+
   connection {
     host  = element(var.connections, count.index)
     user  = "root"
-    agent = true
+    type  = "ssh"
+    private_key = file("${var.hcloud_ssh_private_key}")
+    agent = false
   }
 
   provisioner "remote-exec" {

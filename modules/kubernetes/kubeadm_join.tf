@@ -7,19 +7,21 @@ resource "null_resource" "kubeadm_join" {
   connection {
     host  = element(var.worker_nodes.*.ipv4_address, count.index)
     user  = "root"
-    agent = true
+    type  = "ssh"
+    private_key = file("${var.hcloud_ssh_private_key}")
+    agent = false
   }
 
   provisioner "local-exec" {
     command = <<EOT
-      ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+      ssh -i ${var.hcloud_ssh_private_key} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
         root@${local.master_ip} 'echo $(kubeadm token create) > /tmp/kubeadm_token'
     EOT
   }
 
   provisioner "local-exec" {
     command = <<EOT
-      scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+      scp -i ${var.hcloud_ssh_private_key} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
         root@${local.master_ip}:/tmp/kubeadm_token \
         /tmp/kubeadm_token
     EOT

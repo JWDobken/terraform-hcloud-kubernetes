@@ -12,7 +12,9 @@ resource "null_resource" "install" {
   connection {
     host  = element(local.connections, count.index)
     user  = "root"
-    agent = true
+    type  = "ssh"
+    private_key = file("${var.hcloud_ssh_private_key}")
+    agent = false
   }
 
   provisioner "remote-exec" {
@@ -75,6 +77,11 @@ resource "null_resource" "install" {
   }
 }
 
+resource "local_sensitive_file" "kubeconfig" {
+    content  = module.kubeconfig.stdout
+    filename = "${var.kubeconfig_path}"
+}
+
 data "template_file" "install" {
   count    = length(local.connections)
   template = file("${path.module}/scripts/install.sh")
@@ -110,7 +117,7 @@ module "kubeconfig" {
   trigger = element(var.master_nodes.*.ipv4_address, 0)
 
   command = <<EOT
-    ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+    ssh -i ${var.hcloud_ssh_private_key} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
       root@${local.master_ip} 'cat /root/.kube/config'
   EOT
 }
@@ -122,9 +129,10 @@ module "endpoint" {
   trigger = element(var.master_nodes.*.ipv4_address, 0)
 
   command = <<EOT
-    ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+    ssh -i ${var.hcloud_ssh_private_key} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
       root@${local.master_ip} 'kubectl config --kubeconfig /root/.kube/config view -o jsonpath='{.clusters[0].cluster.server}''
   EOT
+
 }
 
 module "certificate_authority_data" {
@@ -134,7 +142,7 @@ module "certificate_authority_data" {
   trigger = element(var.master_nodes.*.ipv4_address, 0)
 
   command = <<EOT
-    ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+    ssh -i ${var.hcloud_ssh_private_key} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
       root@${local.master_ip} 'kubectl config --kubeconfig /root/.kube/config view --flatten -o jsonpath='{.clusters[0].cluster.certificate-authority-data}''
   EOT
 }
@@ -146,7 +154,7 @@ module "client_certificate_data" {
   trigger = element(var.master_nodes.*.ipv4_address, 0)
 
   command = <<EOT
-    ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+    ssh -i ${var.hcloud_ssh_private_key} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
       root@${local.master_ip} 'kubectl config --kubeconfig /root/.kube/config view --flatten -o jsonpath='{.users[0].user.client-certificate-data}''
   EOT
 }
@@ -158,7 +166,7 @@ module "client_key_data" {
   trigger = element(var.master_nodes.*.ipv4_address, 0)
 
   command = <<EOT
-    ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+    ssh -i ${var.hcloud_ssh_private_key} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
       root@${local.master_ip} 'kubectl config --kubeconfig /root/.kube/config view --flatten -o jsonpath='{.users[0].user.client-key-data}''
   EOT
 }

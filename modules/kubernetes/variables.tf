@@ -5,6 +5,14 @@ variable "hcloud_token" {
   default = ""
 }
 
+variable "hcloud_ssh_private_key" {
+  type = string
+}
+
+variable "kubeconfig_path" {
+  type = string
+}
+
 # NETWORK
 variable "network_id" {
   type = string

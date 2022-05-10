@@ -5,8 +5,8 @@ variable "hcloud_token" {
   default = ""
 }
 
-variable "hcloud_ssh_keys" {
-  type = list(any)
+variable "hcloud_ssh_private_key" {
+  type = string
 }
 
 variable "cluster_name" {
