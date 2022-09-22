@@ -84,7 +84,6 @@ resource "hcloud_load_balancer_network" "cluster_network" {
 ```cmd
 helm repo add bitnami https://charts.bitnami.com/bitnami
 helm upgrade --install nginx-ingress \
-    --version 5.6.13 \
     --set service.annotations."load-balancer\.hetzner\.cloud/name"="demo-cluster-lb" \
     bitnami/nginx-ingress-controller
 ```
