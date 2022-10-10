@@ -1,20 +1,20 @@
 # cluster/main.tf
 
 locals {
-  server_count = var.master_count + var.worker_count
-  servers      = concat(hcloud_server.master_node, hcloud_server.worker_node)
+  server_count = var.control_plane_count + var.worker_count
+  servers      = concat(hcloud_server.control_plane_node, hcloud_server.worker_node)
 }
 
-resource "hcloud_server" "master_node" {
-  count       = var.master_count
-  name        = format(var.mastername_format, count.index + 1)
+resource "hcloud_server" "control_plane_node" {
+  count       = var.control_plane_count
+  name        = format(var.control_plane_name_format, count.index + 1)
   location    = var.location
   image       = var.image
-  server_type = var.master_type
+  server_type = var.control_plane_type
   ssh_keys    = var.hcloud_ssh_keys
 
   labels = {
-    master = true
+    control-plane = true
   }
 
   connection {
@@ -47,7 +47,7 @@ resource "hcloud_server" "worker_node" {
   ssh_keys    = var.hcloud_ssh_keys
 
   labels = {
-    master = false
+    control-plane = false
   }
 
   connection {

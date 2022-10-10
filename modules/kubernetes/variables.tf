@@ -14,8 +14,8 @@ variable "private_ips" {
   type = list(any)
 }
 
-# MASTER NODES
-variable "master_nodes" {
+# CONTROL-PLANE NODES
+variable "control_plane_nodes" {
   type = list(any)
 }
 

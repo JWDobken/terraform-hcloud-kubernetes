@@ -1,10 +1,10 @@
 # cluster/version.tf
 terraform {
-  required_version = ">= 0.13"
+  required_version = ">= 1.2.8"
   required_providers {
     hcloud = {
       source  = "hetznercloud/hcloud"
-      version = ">= 1.22.0"
+      version = ">= 1.35.2"
     }
   }
 }

@@ -1,9 +1,10 @@
 # providers
 terraform {
-  required_version = ">= 0.14.7"
+  required_version = ">= 1.3.2"
   required_providers {
     hcloud = {
-      source = "hetznercloud/hcloud"
+      source  = "hetznercloud/hcloud"
+      version = ">= 1.35.2"
     }
   }
 }
@@ -16,7 +17,7 @@ variable "cluster_name" {
   type = string
 }
 
-variable "master_type" {
+variable "control_plane_type" {
   type = string
 }
 
@@ -52,14 +53,14 @@ resource "hcloud_ssh_key" "demo_keys" {
 
 # Create a kubernetes cluster
 module "hcloud_kubernetes_cluster" {
-  source          = "JWDobken/kubernetes/hcloud"
-  version         = "v0.2.0"
-  cluster_name    = var.cluster_name
-  hcloud_token    = var.hcloud_token
-  hcloud_ssh_keys = [hcloud_ssh_key.demo_keys.id]
-  master_type     = var.master_type
-  worker_type     = var.worker_type
-  worker_count    = var.worker_count
+  source             = "JWDobken/kubernetes/hcloud"
+  version            = "v0.3.0"
+  cluster_name       = var.cluster_name
+  hcloud_token       = var.hcloud_token
+  hcloud_ssh_keys    = [hcloud_ssh_key.demo_keys.id]
+  control_plane_type = var.control_plane_type
+  worker_type        = var.worker_type
+  worker_count       = var.worker_count
 }
 
 resource "hcloud_load_balancer" "load_balancer" {

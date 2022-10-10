@@ -13,14 +13,14 @@ resource "null_resource" "kubeadm_join" {
   provisioner "local-exec" {
     command = <<EOT
       ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
-        root@${local.master_ip} 'echo $(kubeadm token create) > /tmp/kubeadm_token'
+        root@${local.control_plane_ip} 'echo $(kubeadm token create) > /tmp/kubeadm_token'
     EOT
   }
 
   provisioner "local-exec" {
     command = <<EOT
       scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
-        root@${local.master_ip}:/tmp/kubeadm_token \
+        root@${local.control_plane_ip}:/tmp/kubeadm_token \
         /tmp/kubeadm_token
     EOT
   }
@@ -41,6 +41,6 @@ data "template_file" "worker" {
   template = file("${path.module}/scripts/worker.sh")
 
   vars = {
-    master_private_ip = local.master_private_ip
+    control_plane_private_ip = local.control_plane_private_ip
   }
 }

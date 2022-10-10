@@ -34,16 +34,16 @@ variable "subnet_ip_range" {
   type = string
 }
 
-# MASTER NODES
-variable "master_type" {
+# CONTROL-PLANE NODES
+variable "control_plane_type" {
   type = string
 }
 
-variable "master_count" {
+variable "control_plane_count" {
   type = number
 }
 
-variable "mastername_format" {
+variable "control_plane_name_format" {
   type = string
 }
 

@@ -9,19 +9,19 @@ output "private_ips" {
   description = "The IPv4 addresses within the private network."
 }
 
-output "master_nodes" {
-  value       = module.cluster.master_nodes
-  description = "The master node objects."
+output "control_plane_nodes" {
+  value       = module.cluster.control_plane_nodes
+  description = "The control-plane node objects."
 }
 
-output "master_nodes_ips" {
-  value       = module.cluster.master_nodes.*.ipv4_address
-  description = "The IPv4 addresses within the master network."
+output "control_plane_nodes_ips" {
+  value       = module.cluster.control_plane_nodes.*.ipv4_address
+  description = "The IPv4 addresses within the control-plane network."
 }
 
-output "master_nodes_ids" {
-  value       = module.cluster.master_nodes.*.id
-  description = "The ids of the master nodes."
+output "control_plane_nodes_ids" {
+  value       = module.cluster.control_plane_nodes.*.id
+  description = "The ids of the control-plane nodes."
 }
 
 output "worker_nodes" {

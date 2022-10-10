@@ -39,15 +39,15 @@ variable "subnet_ip_range" {
   default     = "10.98.0.0/16"
 }
 
-# MASTER NODES
-variable "master_type" {
+# CONTROL-PLANE NODES
+variable "control_plane_type" {
   description = "(Optional) - For more types have a look at https://www.hetzner.de/cloud"
   type        = string
   default     = "cx11"
 }
 
-variable "master_count" {
-  description = "(Optional) - Number of master nodes."
+variable "control_plane_count" {
+  description = "(Optional) - Number of control-plane nodes."
   type        = number
   default     = 1
 }
@@ -58,10 +58,10 @@ variable "image" {
   default     = "ubuntu-20.04"
 }
 
-variable "mastername_format" {
-  description = "(Optional) - Format for the master node names, defaults to 'master-0'."
+variable "control_plane_name_format" {
+  description = "(Optional) - Format for the control-plane node names, defaults to 'control-plane-0'."
   type        = string
-  default     = "master-%d"
+  default     = "control-plane-%d"
 }
 
 # WORKER NODES
@@ -84,7 +84,7 @@ variable "workername_format" {
 
 # KUBERNETES
 variable "kubernetes_version" {
-  description = "(Optional) - Kubernetes version installed, e.g. '1.21.3'."
+  description = "(Optional) - Kubernetes version installed, e.g. '1.25.2'."
   type        = string
-  default     = "1.21.3"
+  default     = "1.25.2"
 }
