@@ -128,11 +128,3 @@ This module came about when I was looking for an affordable Kubernetes cluster. 
 - Niclas Mietz's [terraform-k8s-hcloud](https://github.com/solidnerd/terraform-k8s-hcloud)
 
 Feel free to contribute or reach out to me.
-
-## CHANGELOG
-
-- update kubernetes to v1.25.2
-- update flannel to latest
-- rename `master` to `control-plane`
-- update hcloud-csi
-- update the Controller Manager
