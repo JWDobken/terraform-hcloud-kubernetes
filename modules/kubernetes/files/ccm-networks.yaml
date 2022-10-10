@@ -8,7 +8,7 @@ metadata:
   namespace: kube-system
 ---
 kind: ClusterRoleBinding
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: system:cloud-controller-manager
 roleRef:
@@ -35,8 +35,6 @@ spec:
     metadata:
       labels:
         app: hcloud-cloud-controller-manager
-      annotations:
-        scheduler.alpha.kubernetes.io/critical-pod: ''
     spec:
       serviceAccountName: cloud-controller-manager
       dnsPolicy: Default
@@ -51,11 +49,15 @@ spec:
         # cloud controller manages should be able to run on masters
         - key: "node-role.kubernetes.io/master"
           effect: NoSchedule
+          operator: Exists
+        - key: "node-role.kubernetes.io/control-plane"
+          effect: NoSchedule
+          operator: Exists
         - key: "node.kubernetes.io/not-ready"
           effect: "NoSchedule"
       hostNetwork: true
       containers:
-        - image: hetznercloud/hcloud-cloud-controller-manager:v1.8.0
+        - image: hetznercloud/hcloud-cloud-controller-manager:v1.9.1
           name: hcloud-cloud-controller-manager
           command:
             - "/bin/hcloud-cloud-controller-manager"
@@ -83,3 +85,4 @@ spec:
                 secretKeyRef:
                   name: hcloud
                   key: network
+      priorityClassName: system-cluster-critical

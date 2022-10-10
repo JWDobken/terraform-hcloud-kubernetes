@@ -14,9 +14,9 @@ output "all_nodes" {
   value       = local.servers
 }
 
-output "master_nodes" {
-  description = "List of master nodes."
-  value       = hcloud_server.master_node
+output "control_plane_nodes" {
+  description = "List of control-plane nodes."
+  value       = hcloud_server.control_plane_node
 }
 
 output "worker_nodes" {

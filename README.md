@@ -1,5 +1,6 @@
-Hetzner Cloud Kubernetes provider 🏖️
-==================
+# Hetzner Cloud Kubernetes provider 🏖️
+
+---
 
 Unofficial Terraform module to provide Kubernetes for the Hetzner Cloud.
 
@@ -17,7 +18,7 @@ Create a Kubernetes cluster on the [Hetzner cloud](https://registry.terraform.io
 
 # Getting Started
 
-The Hetzner Cloud provider needs to be configured with *a token generated from the dashboard*, following to the [documentation](https://registry.terraform.io/providers/hetznercloud/hcloud/latest/docs). Provide a [Hetzner Cloud SSH key resource](https://registry.terraform.io/providers/hetznercloud/hcloud/latest/docs/resources/ssh_key) to access the cluster machines:
+The Hetzner Cloud provider needs to be configured with _a token generated from the dashboard_, following to the [documentation](https://registry.terraform.io/providers/hetznercloud/hcloud/latest/docs). Provide a [Hetzner Cloud SSH key resource](https://registry.terraform.io/providers/hetznercloud/hcloud/latest/docs/resources/ssh_key) to access the cluster machines:
 
 ```hcl
 resource "hcloud_ssh_key" "demo_cluster" {
@@ -34,7 +35,7 @@ module "hcloud_kubernetes_cluster" {
   cluster_name    = "demo-cluster"
   hcloud_token    = var.hcloud_token
   hcloud_ssh_keys = [hcloud_ssh_key.demo_cluster.id]
-  master_type     = "cx11" # optional
+  control_plane_type     = "cx11" # optional
   worker_type     = "cx21" # optional
   worker_count    = 3
 }
@@ -55,11 +56,11 @@ and check the access by viewing the created cluster nodes:
 
 ```cmd
 $ kubectl get nodes --kubeconfig=demo-cluster.conf
-NAME       STATUS   ROLES                AGE   VERSION
-master-1   Ready    control-plane,master 95s   v1.21.3
-worker-1   Ready    <none>               72s   v1.21.3
-worker-2   Ready    <none>               73s   v1.21.3
-worker-3   Ready    <none>               73s   v1.21.3
+NAME              STATUS   ROLES           AGE   VERSION
+control-plane-1   Ready    control-plane   84s   v1.25.2
+worker-1          Ready    <none>          50s   v1.25.2
+worker-2          Ready    <none>          51s   v1.25.2
+worker-3          Ready    <none>          51s   v1.25.2
 ```
 
 ## Load Balancer
@@ -115,11 +116,11 @@ provider "kubernetes" {
 ## Considered features:
 
 - When a node is destroyed, I still need to run `kubectl drain <nodename>` and `kubectl delete node <nodename>`. Compare actual list with `kubectl get nodes --output 'jsonpath={.items[*].metadata.name}'`.
-- [High availability for the control plane](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/).
+- [High availability for the control-plane](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/).
 - Node-pool architecture, with option to label and taint.
-- Initialize multiple master nodes.
+- Initialize multiple control-plane nodes.
 
-## Acknowledgements 
+## Acknowledgements
 
 This module came about when I was looking for an affordable Kubernetes cluster. There is an [article from Christian Beneke](https://community.hetzner.com/tutorials/install-kubernetes-cluster) and there are a couple of Terraform projects on which the current is heavily based:
 
@@ -127,3 +128,11 @@ This module came about when I was looking for an affordable Kubernetes cluster. 
 - Niclas Mietz's [terraform-k8s-hcloud](https://github.com/solidnerd/terraform-k8s-hcloud)
 
 Feel free to contribute or reach out to me.
+
+## CHANGELOG
+
+- update kubernetes to v1.25.2
+- update flannel to latest
+- rename `master` to `control-plane`
+- update hcloud-csi
+- update the Controller Manager
