@@ -40,7 +40,7 @@ resource "hcloud_server" "control_plane_node" {
 
 resource "hcloud_server" "worker_node" {
   count       = var.worker_count
-  name        = format(var.workername_format, count.index + 1)
+  name        = format(var.worker_name_format, count.index + 1)
   location    = var.location
   image       = var.image
   server_type = var.worker_type

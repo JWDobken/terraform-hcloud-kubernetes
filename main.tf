@@ -13,7 +13,7 @@ module "cluster" {
   control_plane_name_format = var.control_plane_name_format
   worker_type               = var.worker_type
   worker_count              = var.worker_count
-  workername_format         = var.workername_format
+  worker_name_format        = var.worker_name_format
 }
 
 module "firewall" {

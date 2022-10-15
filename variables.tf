@@ -76,7 +76,7 @@ variable "worker_count" {
   type        = number
 }
 
-variable "workername_format" {
+variable "worker_name_format" {
   description = "(Optional) - Format for the worker node names, defaults to 'worker-0'."
   type        = string
   default     = "worker-%d"

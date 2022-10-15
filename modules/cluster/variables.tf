@@ -56,7 +56,7 @@ variable "worker_count" {
   type = number
 }
 
-variable "workername_format" {
+variable "worker_name_format" {
   type = string
 }
 
