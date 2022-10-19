@@ -9,6 +9,11 @@ variable "hcloud_ssh_keys" {
   type = list(any)
 }
 
+variable "private_key" {
+  type      = string
+  sensitive = true
+}
+
 variable "cluster_name" {
   type = string
 }

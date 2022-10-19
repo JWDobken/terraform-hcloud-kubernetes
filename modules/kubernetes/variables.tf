@@ -14,6 +14,11 @@ variable "private_ips" {
   type = list(any)
 }
 
+variable "private_key" {
+  type      = string
+  sensitive = true
+}
+
 # CONTROL-PLANE NODES
 variable "control_plane_nodes" {
   type = list(any)

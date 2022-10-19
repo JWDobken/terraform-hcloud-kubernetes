@@ -10,10 +10,9 @@ resource "null_resource" "install" {
   count = length(local.connections)
 
   connection {
-    type  = "ssh"
-    host  = element(local.connections, count.index)
-    user  = "root"
-    agent = true
+    host        = element(local.connections, count.index)
+    type        = "ssh"
+    private_key = var.private_key
   }
 
   provisioner "remote-exec" {
