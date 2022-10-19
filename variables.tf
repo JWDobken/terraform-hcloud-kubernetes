@@ -14,6 +14,12 @@ variable "hcloud_ssh_keys" {
   type        = list(any)
 }
 
+variable "private_key" {
+  description = "(Required) - content of an SSH key to use for the connection. These can be loaded from a file on disk using the `file` function."
+  type        = string
+  sensitive   = true
+}
+
 variable "location" {
   description = "(Optional) - Location, e.g. 'nbg1' (Neurenberg)."
   type        = string

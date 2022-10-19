@@ -5,9 +5,9 @@ resource "null_resource" "kubeadm_join" {
   depends_on = [null_resource.install]
 
   connection {
-    host  = element(var.worker_nodes.*.ipv4_address, count.index)
-    user  = "root"
-    agent = true
+    host        = element(var.worker_nodes.*.ipv4_address, count.index)
+    type        = "ssh"
+    private_key = var.private_key
   }
 
   provisioner "local-exec" {

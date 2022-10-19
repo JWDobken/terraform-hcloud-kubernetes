@@ -2,6 +2,7 @@ module "cluster" {
   source                    = "./modules/cluster"
   hcloud_token              = var.hcloud_token
   hcloud_ssh_keys           = var.hcloud_ssh_keys
+  private_key               = var.private_key
   cluster_name              = var.cluster_name
   location                  = var.location
   image                     = var.image
@@ -20,6 +21,7 @@ module "firewall" {
   source          = "./modules/firewall"
   connections     = module.cluster.all_nodes.*.ipv4_address
   subnet_ip_range = var.subnet_ip_range
+  private_key     = var.private_key
 }
 
 module "kubernetes" {
@@ -31,4 +33,5 @@ module "kubernetes" {
   worker_nodes        = module.cluster.worker_nodes
   private_ips         = module.cluster.private_ips
   kubernetes_version  = var.kubernetes_version
+  private_key         = var.private_key
 }
