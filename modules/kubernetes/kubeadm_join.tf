@@ -12,6 +12,8 @@ resource "null_resource" "kubeadm_join" {
 
   provisioner "local-exec" {
     command = <<EOT
+      eval "$(ssh-agent -s)"
+      echo "${var.private_key}" | tr -d '\r' | ssh-add -
       ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
         root@${local.control_plane_ip} 'echo $(kubeadm token create) > /tmp/kubeadm_token'
     EOT
@@ -19,6 +21,8 @@ resource "null_resource" "kubeadm_join" {
 
   provisioner "local-exec" {
     command = <<EOT
+      eval "$(ssh-agent -s)"
+      echo "${var.private_key}" | tr -d '\r' | ssh-add -
       scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
         root@${local.control_plane_ip}:/tmp/kubeadm_token \
         /tmp/kubeadm_token
