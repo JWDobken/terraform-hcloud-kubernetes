@@ -5,15 +5,13 @@ resource "null_resource" "kubeadm_join" {
   depends_on = [null_resource.install]
 
   connection {
-    host        = element(var.worker_nodes.*.ipv4_address, count.index)
-    type        = "ssh"
-    private_key = var.private_key
+    host  = element(var.worker_nodes.*.ipv4_address, count.index)
+    user  = "root"
+    agent = true
   }
 
   provisioner "local-exec" {
     command = <<EOT
-      eval "$(ssh-agent -s)"
-      echo "${var.private_key}" | tr -d '\r' | ssh-add -
       ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
         root@${local.control_plane_ip} 'echo $(kubeadm token create) > /tmp/kubeadm_token'
     EOT
@@ -21,8 +19,6 @@ resource "null_resource" "kubeadm_join" {
 
   provisioner "local-exec" {
     command = <<EOT
-      eval "$(ssh-agent -s)"
-      echo "${var.private_key}" | tr -d '\r' | ssh-add -
       scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
         root@${local.control_plane_ip}:/tmp/kubeadm_token \
         /tmp/kubeadm_token

@@ -10,9 +10,10 @@ resource "null_resource" "install" {
   count = length(local.connections)
 
   connection {
-    host        = element(local.connections, count.index)
-    type        = "ssh"
-    private_key = var.private_key
+    type  = "ssh"
+    host  = element(local.connections, count.index)
+    user  = "root"
+    agent = true
   }
 
   provisioner "remote-exec" {
@@ -110,8 +111,6 @@ module "kubeconfig" {
   trigger = element(var.control_plane_nodes.*.ipv4_address, 0)
 
   command = <<EOT
-    eval "$(ssh-agent -s)" > /dev/null
-    echo "${var.private_key}" | tr -d '\r' | ssh-add - > /dev/null
     ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
       root@${local.control_plane_ip} 'cat /root/.kube/config'
   EOT
@@ -124,8 +123,6 @@ module "endpoint" {
   trigger = element(var.control_plane_nodes.*.ipv4_address, 0)
 
   command = <<EOT
-    eval "$(ssh-agent -s)" > /dev/null
-    echo "${var.private_key}" | tr -d '\r' | ssh-add - > /dev/null
     ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
       root@${local.control_plane_ip} 'kubectl config --kubeconfig /root/.kube/config view -o jsonpath='{.clusters[0].cluster.server}''
   EOT
@@ -138,8 +135,6 @@ module "certificate_authority_data" {
   trigger = element(var.control_plane_nodes.*.ipv4_address, 0)
 
   command = <<EOT
-    eval "$(ssh-agent -s)" > /dev/null
-    echo "${var.private_key}" | tr -d '\r' | ssh-add - > /dev/null
     ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
       root@${local.control_plane_ip} 'kubectl config --kubeconfig /root/.kube/config view --flatten -o jsonpath='{.clusters[0].cluster.certificate-authority-data}''
   EOT
@@ -152,8 +147,6 @@ module "client_certificate_data" {
   trigger = element(var.control_plane_nodes.*.ipv4_address, 0)
 
   command = <<EOT
-    eval "$(ssh-agent -s)" > /dev/null
-    echo "${var.private_key}" | tr -d '\r' | ssh-add - > /dev/null
     ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
       root@${local.control_plane_ip} 'kubectl config --kubeconfig /root/.kube/config view --flatten -o jsonpath='{.users[0].user.client-certificate-data}''
   EOT
@@ -166,8 +159,6 @@ module "client_key_data" {
   trigger = element(var.control_plane_nodes.*.ipv4_address, 0)
 
   command = <<EOT
-    eval "$(ssh-agent -s)" > /dev/null
-    echo "${var.private_key}" | tr -d '\r' | ssh-add - > /dev/null
     ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
       root@${local.control_plane_ip} 'kubectl config --kubeconfig /root/.kube/config view --flatten -o jsonpath='{.users[0].user.client-key-data}''
   EOT

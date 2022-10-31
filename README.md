@@ -31,14 +31,13 @@ Create a Kubernetes cluster:
 
 ```hcl
 module "hcloud_kubernetes_cluster" {
-  source             = "JWDobken/kubernetes/hcloud"
-  cluster_name       = "demo-cluster"
-  hcloud_token       = var.hcloud_token
-  hcloud_ssh_keys    = [hcloud_ssh_key.demo_cluster.id]
-  private_key        = file("~/.ssh/hcloud")
-  control_plane_type = "cx11" # optional
-  worker_type        = "cx21" # optional
-  worker_count       = 3
+  source          = "JWDobken/kubernetes/hcloud"
+  cluster_name    = "demo-cluster"
+  hcloud_token    = var.hcloud_token
+  hcloud_ssh_keys = [hcloud_ssh_key.demo_cluster.id]
+  control_plane_type     = "cx11" # optional
+  worker_type     = "cx21" # optional
+  worker_count    = 3
 }
 
 output "kubeconfig" {
@@ -123,7 +122,7 @@ provider "kubernetes" {
 
 ## Acknowledgements
 
-This module came about when I was looking for an affordable Kubernetes cluster. There are a couple of Terraform projects on which the current is heavily based:
+This module came about when I was looking for an affordable Kubernetes cluster. There is an [article from Christian Beneke](https://community.hetzner.com/tutorials/install-kubernetes-cluster) and there are a couple of Terraform projects on which the current is heavily based:
 
 - Patrick Stadler's [hobby-kube provisioning](https://github.com/hobby-kube/provisioning)
 - Niclas Mietz's [terraform-k8s-hcloud](https://github.com/solidnerd/terraform-k8s-hcloud)

@@ -8,11 +8,6 @@ variable "subnet_ip_range" {
   type = string
 }
 
-variable "private_key" {
-  type      = string
-  sensitive = true
-}
-
 resource "null_resource" "firewall" {
   count = length(var.connections)
 
@@ -21,9 +16,9 @@ resource "null_resource" "firewall" {
   }
 
   connection {
-    host        = element(var.connections, count.index)
-    type        = "ssh"
-    private_key = var.private_key
+    host  = element(var.connections, count.index)
+    user  = "root"
+    agent = true
   }
 
   provisioner "remote-exec" {

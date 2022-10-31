@@ -18,9 +18,10 @@ resource "hcloud_server" "control_plane_node" {
   }
 
   connection {
-    host        = self.ipv4_address
-    type        = "ssh"
-    private_key = var.private_key
+    user    = "root"
+    type    = "ssh"
+    timeout = "2m"
+    host    = self.ipv4_address
   }
 
   provisioner "file" {
@@ -50,9 +51,10 @@ resource "hcloud_server" "worker_node" {
   }
 
   connection {
-    host        = self.ipv4_address
-    type        = "ssh"
-    private_key = var.private_key
+    user    = "root"
+    type    = "ssh"
+    timeout = "2m"
+    host    = self.ipv4_address
   }
 
   provisioner "file" {
