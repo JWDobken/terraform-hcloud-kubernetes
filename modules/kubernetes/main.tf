@@ -45,12 +45,15 @@ resource "null_resource" "install" {
 
   provisioner "remote-exec" {
     inline = [
-      element(data.template_file.install.*.rendered, count.index)
+      templatefile("${path.module}/scripts/install.sh", { kubernetes_version = var.kubernetes_version })
     ]
   }
 
   provisioner "file" {
-    content     = data.template_file.access_tokens.rendered
+    content = templatefile("${path.module}/files/access_tokens.yaml", {
+      hcloud_token = var.hcloud_token,
+      network_id   = var.network_id
+    })
     destination = "/tmp/access_tokens.yaml"
   }
 
@@ -71,36 +74,8 @@ resource "null_resource" "install" {
 
   provisioner "remote-exec" {
     inline = [
-      count.index < length(var.control_plane_nodes) ? data.template_file.control_plane.rendered : "echo skip"
+      count.index < length(var.control_plane_nodes) ? templatefile("${path.module}/scripts/control_plane.sh", { kubernetes_version = var.kubernetes_version, control_plane_ip = local.control_plane_ip, cluster_name = var.cluster_name }) : "echo skip"
     ]
-  }
-}
-
-data "template_file" "install" {
-  count    = length(local.connections)
-  template = file("${path.module}/scripts/install.sh")
-
-  vars = {
-    kubernetes_version = var.kubernetes_version
-  }
-}
-
-data "template_file" "control_plane" {
-  template = file("${path.module}/scripts/control_plane.sh")
-
-  vars = {
-    kubernetes_version = var.kubernetes_version
-    control_plane_ip   = local.control_plane_ip
-    cluster_name       = var.cluster_name
-  }
-}
-
-data "template_file" "access_tokens" {
-  template = file("${path.module}/files/access_tokens.yaml")
-
-  vars = {
-    hcloud_token = var.hcloud_token
-    network_id   = var.network_id
   }
 }
 

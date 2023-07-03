@@ -32,15 +32,7 @@ resource "null_resource" "kubeadm_join" {
 
   provisioner "remote-exec" {
     inline = [
-      data.template_file.worker.rendered
+      templatefile("${path.module}/scripts/worker.sh", { control_plane_private_ip = local.control_plane_private_ip })
     ]
-  }
-}
-
-data "template_file" "worker" {
-  template = file("${path.module}/scripts/worker.sh")
-
-  vars = {
-    control_plane_private_ip = local.control_plane_private_ip
   }
 }
